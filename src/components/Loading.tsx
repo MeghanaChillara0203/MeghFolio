@@ -31,7 +31,7 @@ const Loading = ({ percent }: { percent: number }) => {
         }, 900);
       }
     });
-  }, [isLoaded]);
+  }, [isLoaded, setIsLoading]);
 
   function handleMouseMove(e: React.MouseEvent<HTMLElement>) {
     const { currentTarget: target } = e;
@@ -45,9 +45,11 @@ const Loading = ({ percent }: { percent: number }) => {
   return (
     <>
       <div className="loading-header">
+        {/* Updated initials to match your branding */}
         <a href="/#" className="loader-title" data-cursor="disable">
-          AM
+          MC
         </a>
+
         <div className={`loaderGame ${clicked && "loader-out"}`}>
           <div className="loaderGame-container">
             <div className="loaderGame-in">
@@ -59,18 +61,22 @@ const Loading = ({ percent }: { percent: number }) => {
           </div>
         </div>
       </div>
+
       <div className="loading-screen">
         <div className="loading-marquee">
           <Marquee>
-            <span> Full Stack Developer</span> <span>Software Engineer</span>
-            <span> Full Stack Developer</span> <span>Software Engineer</span>
+            {/* Updated marquee text to reflect your actual target profile */}
+            <span> Data Scientist</span> <span>AI / ML Engineer</span>
+            <span> Software Engineer</span> <span>Data Scientist</span>
           </Marquee>
         </div>
+
         <div
           className={`loading-wrap ${clicked && "loading-clicked"}`}
           onMouseMove={(e) => handleMouseMove(e)}
         >
           <div className="loading-hover"></div>
+
           <div className={`loading-button ${loaded && "loading-complete"}`}>
             <div className="loading-container">
               <div className="loading-content">
@@ -80,6 +86,7 @@ const Loading = ({ percent }: { percent: number }) => {
               </div>
               <div className="loading-box"></div>
             </div>
+
             <div className="loading-content2">
               <span>Welcome</span>
             </div>
@@ -131,5 +138,6 @@ export const setProgress = (setLoading: (value: number) => void) => {
       }, 2);
     });
   }
+
   return { loaded, percent, clear };
 };

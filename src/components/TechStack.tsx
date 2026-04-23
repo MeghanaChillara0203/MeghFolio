@@ -12,16 +12,22 @@ import {
 } from "@react-three/rapier";
 
 const textureLoader = new THREE.TextureLoader();
+
+/*
+  Replaced old stack images with a stack that better matches your profile.
+  Make sure these files exist in /public/images/
+*/
 const imageUrls = [
+  "/images/python.webp",
+  "/images/java.webp",
   "/images/react2.webp",
-  "/images/next2.webp",
-  "/images/node2.webp",
-  "/images/express.webp",
-  "/images/mongo.webp",
-  "/images/mysql.webp",
-  "/images/typescript.webp",
-  "/images/javascript.webp",
+  "/images/aws.webp",
+  "/images/docker.webp",
+  "/images/pytorch.webp",
+  "/images/tensorflow.webp",
+  "/images/openai.webp",
 ];
+
 const textures = imageUrls.map((url) => textureLoader.load(url));
 
 const sphereGeometry = new THREE.SphereGeometry(1, 28, 28);
@@ -135,22 +141,27 @@ const TechStack = () => {
         .getBoundingClientRect().top;
       setIsActive(scrollY > threshold);
     };
+
     document.querySelectorAll(".header a").forEach((elem) => {
       const element = elem as HTMLAnchorElement;
       element.addEventListener("click", () => {
         const interval = setInterval(() => {
           handleScroll();
         }, 10);
+
         setTimeout(() => {
           clearInterval(interval);
         }, 1000);
       });
     });
+
     window.addEventListener("scroll", handleScroll);
+
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
   const materials = useMemo(() => {
     return textures.map(
       (texture) =>
@@ -168,7 +179,8 @@ const TechStack = () => {
 
   return (
     <div className="techstack">
-      <h2> My Techstack</h2>
+      {/* Slightly stronger heading, still same structure */}
+      <h2>Tools & Technologies</h2>
 
       <Canvas
         shadows
@@ -187,6 +199,7 @@ const TechStack = () => {
           shadow-mapSize={[512, 512]}
         />
         <directionalLight position={[0, 5, -4]} intensity={2} />
+
         <Physics gravity={[0, 0, 0]}>
           <Pointer isActive={isActive} />
           {spheres.map((props, i) => (
@@ -198,11 +211,13 @@ const TechStack = () => {
             />
           ))}
         </Physics>
+
         <Environment
           files="/models/char_enviorment.hdr"
           environmentIntensity={0.5}
           environmentRotation={[0, 4, 2]}
         />
+
         <EffectComposer enableNormalPass={false}>
           <N8AO color="#0f002c" aoRadius={2} intensity={1.15} />
         </EffectComposer>

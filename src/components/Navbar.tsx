@@ -35,25 +35,29 @@ const Navbar = () => {
         }
       });
     });
+
     window.addEventListener("resize", () => {
       ScrollSmoother.refresh(true);
     });
   }, []);
+
   return (
     <>
       <div className="header">
         <a href="/#" className="navbar-title" data-cursor="disable">
-          AM
+          Meghana
         </a>
+
         <a
-          href="https://www.linkedin.com/in/akashrmalhotra/"
+          href="https://www.linkedin.com/in/meghana-chillara/"
           className="navbar-connect"
           data-cursor="disable"
           target="_blank"
           rel="noreferrer"
         >
-          linkedin.com/in/akashrmalhotra
+          linkedin.com/in/meghana-chillara
         </a>
+
         <ul>
           <li>
             <a data-href="#about" href="#about">

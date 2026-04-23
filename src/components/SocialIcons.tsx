@@ -1,8 +1,6 @@
 import {
   FaGithub,
-  FaInstagram,
   FaLinkedinIn,
-  FaYoutube,
 } from "react-icons/fa6";
 import "./styles/SocialIcons.css";
 import { TbNotes } from "react-icons/tb";
@@ -59,46 +57,35 @@ const SocialIcons = () => {
   return (
     <div className="icons-section">
       <div className="social-icons" data-cursor="icons" id="social">
+
+        {/* GitHub → replaced */}
         <span>
           <a
-            href="https://github.com/akashrmalhotra"
+            href="https://github.com/MeghanaChillara0203"
             target="_blank"
             rel="noreferrer"
           >
             <FaGithub />
           </a>
         </span>
+
+        {/* LinkedIn → replaced */}
         <span>
           <a
-            href="https://www.linkedin.com/in/akashrmalhotra/"
+            href="https://www.linkedin.com/in/meghana-chillara/"
             target="_blank"
             rel="noreferrer"
           >
             <FaLinkedinIn />
           </a>
         </span>
-        <span>
-          <a
-            href="https://www.youtube.com/@Leftbraincoder"
-            target="_blank"
-            rel="noreferrer"
-          >
-            <FaYoutube />
-          </a>
-        </span>
-        <span>
-          <a
-            href="https://www.instagram.com/leftbraincoder/"
-            target="_blank"
-            rel="noreferrer"
-          >
-            <FaInstagram />
-          </a>
-        </span>
+
       </div>
+
+      {/* Resume → replaced with your actual resume */}
       <a
         className="resume-button"
-        href="/Akash_Malhotra.pdf"
+        href="/Meghana_Chillara.pdf"
         target="_blank"
         rel="noreferrer"
       >

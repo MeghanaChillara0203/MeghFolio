@@ -6,32 +6,50 @@ const Contact = () => {
     <div className="contact-section section-container" id="contact">
       <div className="contact-container">
         <h3>Contact</h3>
+
         <div className="contact-flex">
           <div className="contact-box">
             <h4>Connect</h4>
+
+            {/* Add Email as primary contact (MOST important change) */}
             <p>
               <a
-                href="https://www.linkedin.com/in/akashrmalhotra/"
+                href="mailto:meghchillara@gmail.com"
+                data-cursor="disable"
+              >
+                Email — meghchillara@gmail.com
+              </a>
+            </p>
+
+            {/* Replace LinkedIn with your profile */}
+            <p>
+              <a
+                href="https://www.linkedin.com/in/meghana-chillara/"
                 target="_blank"
                 rel="noreferrer"
                 data-cursor="disable"
               >
-                LinkedIn — akashrmalhotra
+                LinkedIn — meghana-chillara
               </a>
             </p>
+
             <h4>Education</h4>
+
+            {/* Replace education with your actual background */}
             <p>
-              PGPWE (MBA), Indian Institute of Management, Lucknow — 2021–2023
+              Master’s in Data Science, Northeastern University — 2022–2024
             </p>
             <p>
-              B.Tech Computer Science, Manav Rachna Educational Institutions —
-              2009–2013
+              Bachelor’s in Computer Science, Jawaharlal Nehru Technological University — 2016–2020
             </p>
           </div>
+
           <div className="contact-box">
             <h4>Social</h4>
+
+            {/* Replace GitHub */}
             <a
-              href="https://github.com/akashrmalhotra"
+              href="https://github.com/MeghanaChillara0203"
               target="_blank"
               rel="noreferrer"
               data-cursor="disable"
@@ -39,8 +57,10 @@ const Contact = () => {
             >
               GitHub <MdArrowOutward />
             </a>
+
+            {/* Replace LinkedIn */}
             <a
-              href="https://www.linkedin.com/in/akashrmalhotra/"
+              href="https://www.linkedin.com/in/meghana-chillara/"
               target="_blank"
               rel="noreferrer"
               data-cursor="disable"
@@ -48,29 +68,24 @@ const Contact = () => {
             >
               LinkedIn <MdArrowOutward />
             </a>
+
+            {/* Remove irrelevant YouTube/Instagram → replaced with Portfolio */}
             <a
-              href="https://www.youtube.com/@Leftbraincoder"
+              href="https://meghanachillara.com/"
               target="_blank"
               rel="noreferrer"
               data-cursor="disable"
               className="contact-social"
             >
-              YouTube <MdArrowOutward />
-            </a>
-            <a
-              href="https://www.instagram.com/leftbraincoder/"
-              target="_blank"
-              rel="noreferrer"
-              data-cursor="disable"
-              className="contact-social"
-            >
-              Instagram <MdArrowOutward />
+              Portfolio <MdArrowOutward />
             </a>
           </div>
+
           <div className="contact-box">
             <h2>
-              Designed and Developed <br /> by <span>Akash Malhotra</span>
+              Designed and Developed <br /> by <span>Meghana Chillara</span>
             </h2>
+
             <h5>
               <MdCopyright /> 2026
             </h5>

@@ -5,32 +5,32 @@ import { MdArrowBack, MdArrowForward } from "react-icons/md";
 
 const projects = [
   {
-    title: "CallHQ",
-    category: "Voice AI Calling Platform",
-    tools: "Voice AI, Calling Automation, CRM Integrations",
-    image: "/images/callhq.png",
-    link: "https://callhq.ai",
+    title: "PrecastinationAI",
+    category: "Multi-Agent AI Workflow System",
+    tools: "Gemini, OpenAI, RAG, Multi-Agent Reasoning, Docker, CI/CD",
+    image: "/images/precastinationai.png",
+    link: "https://github.com/MeghanaChillara0203/PrecastinationAI",
   },
   {
-    title: "Whatsapp Automation",
-    category: "WABA Application",
-    tools: "WhatsApp Business API, Workflow Automation, Notifications",
-    image: "/images/whatsapp.png",
-    link: "https://whatsapp.callhq.ai",
+    title: "Research Co Pilot",
+    category: "AI-Powered Academic Research Assistant",
+    tools: "Python, Qdrant, Semantic Search, Summarization, Vector Search",
+    image: "/images/research-copilot.png",
+    link: "https://github.com/MeghanaChillara0203/Research-Co-Pilot",
   },
   {
-    title: "Broki",
-    category: "Real Estate Platform for FnB Industry",
-    tools: "Property Discovery, Lead Management, Marketplace Workflows",
-    image: "/images/broki.png",
-    link: "https://broki.in",
+    title: "Smart Real Estate Insights Engine",
+    category: "Predictive Analytics for Rental Pricing",
+    tools: "Python, FastAPI, Random Forest, Scikit-learn, Data Modeling",
+    image: "/images/srie.png",
+    link: "https://github.com/MeghanaChillara0203/Smart_Real_Estate_Insights_Engine",
   },
   {
-    title: "Orrdr.com",
-    category: "Ecommerce Platform and Mobile App",
-    tools: "Ecommerce, Mobile Experience, Order Management",
-    image: "/images/orrdr.png",
-    link: "https://orrdr.com",
+    title: "Rain Check",
+    category: "Weather Intelligence and Forecasting Platform",
+    tools: "Python, Predictive Modeling, Real-Time Data, Analytics",
+    image: "/images/raincheck.png",
+    link: "https://github.com/MeghanaChillara0203/RainCheck",
   },
 ];
 
@@ -68,7 +68,6 @@ const Work = () => {
         </h2>
 
         <div className="carousel-wrapper">
-          {/* Navigation Arrows */}
           <button
             className="carousel-arrow carousel-arrow-left"
             onClick={goToPrev}
@@ -77,6 +76,7 @@ const Work = () => {
           >
             <MdArrowBack />
           </button>
+
           <button
             className="carousel-arrow carousel-arrow-right"
             onClick={goToNext}
@@ -86,7 +86,6 @@ const Work = () => {
             <MdArrowForward />
           </button>
 
-          {/* Slides */}
           <div className="carousel-track-container">
             <div
               className="carousel-track"
@@ -101,17 +100,20 @@ const Work = () => {
                       <div className="carousel-number">
                         <h3>0{index + 1}</h3>
                       </div>
+
                       <div className="carousel-details">
                         <h4>{project.title}</h4>
                         <p className="carousel-category">
                           {project.category}
                         </p>
+
                         <div className="carousel-tools">
                           <span className="tools-label">Tools & Features</span>
                           <p>{project.tools}</p>
                         </div>
                       </div>
                     </div>
+
                     <div className="carousel-image-wrapper">
                       <WorkImage
                         image={project.image}
@@ -125,7 +127,6 @@ const Work = () => {
             </div>
           </div>
 
-          {/* Dot Indicators */}
           <div className="carousel-dots">
             {projects.map((_, index) => (
               <button

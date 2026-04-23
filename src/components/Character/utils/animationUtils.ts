@@ -1,118 +1,63 @@
 import * as THREE from "three";
 import { GLTF } from "three-stdlib";
-import { eyebrowBoneNames, typingBoneNames } from "../../../data/boneData";
 
 const setAnimations = (gltf: GLTF) => {
-  let character = gltf.scene;
-  let mixer = new THREE.AnimationMixer(character);
+  const character = gltf.scene;
+  const mixer = new THREE.AnimationMixer(character);
+
   if (gltf.animations) {
+    // Intro animation: plays once, clamps at final seated pose
     const introClip = gltf.animations.find(
       (clip) => clip.name === "introAnimation"
     );
-    const introAction = mixer.clipAction(introClip!);
-    introAction.setLoop(THREE.LoopOnce, 1);
-    introAction.clampWhenFinished = true;
-    introAction.play();
-    const clipNames = ["key1", "key2", "key5", "key6"];
-    clipNames.forEach((name) => {
+    if (introClip) {
+      const introAction = mixer.clipAction(introClip);
+      introAction.setLoop(THREE.LoopOnce, 1);
+      introAction.clampWhenFinished = true;
+      introAction.play();
+    }
+
+    // Seated idle loops: play on top of each other, blend together
+    const idleNames = ["key1", "key2"];
+    idleNames.forEach((name) => {
       const clip = THREE.AnimationClip.findByName(gltf.animations, name);
       if (clip) {
-        const action = mixer?.clipAction(clip);
-        action!.play();
-        action!.timeScale = 1.2;
+        const action = mixer.clipAction(clip);
+        action.play();
+        action.timeScale = 1.0;
+        action.setEffectiveWeight(0.3); // subtle idle, don't overpower
       } else {
-        console.error(`Animation "${name}" not found`);
+        console.warn(`Animation "${name}" not found`);
       }
     });
-    let typingAction: THREE.AnimationAction | null = null;
-    typingAction = createBoneAction(gltf, mixer, "typing", typingBoneNames);
-    if (typingAction) {
-      typingAction.enabled = true;
+
+    // Typing animation: plays as the main body action
+    const typingClip = THREE.AnimationClip.findByName(gltf.animations, "typing");
+    if (typingClip) {
+      const typingAction = mixer.clipAction(typingClip);
       typingAction.play();
-      typingAction.timeScale = 1.2;
+      typingAction.timeScale = 1.0;
     }
   }
+
   function startIntro() {
     const introClip = gltf.animations.find(
       (clip) => clip.name === "introAnimation"
     );
-    const introAction = mixer.clipAction(introClip!);
-    introAction.clampWhenFinished = true;
-    introAction.reset().play();
-    setTimeout(() => {
-      const blink = gltf.animations.find((clip) => clip.name === "Blink");
-      mixer.clipAction(blink!).play().fadeIn(0.5);
-    }, 2500);
-  }
-  function hover(gltf: GLTF, hoverDiv: HTMLDivElement) {
-    let eyeBrowUpAction = createBoneAction(
-      gltf,
-      mixer,
-      "browup",
-      eyebrowBoneNames
-    );
-    let isHovering = false;
-    if (eyeBrowUpAction) {
-      eyeBrowUpAction.setLoop(THREE.LoopOnce, 1);
-      eyeBrowUpAction.clampWhenFinished = true;
-      eyeBrowUpAction.enabled = true;
+    if (introClip) {
+      const introAction = mixer.clipAction(introClip);
+      introAction.clampWhenFinished = true;
+      introAction.reset().play();
     }
-    const onHoverFace = () => {
-      if (eyeBrowUpAction && !isHovering) {
-        isHovering = true;
-        eyeBrowUpAction.reset();
-        eyeBrowUpAction.enabled = true;
-        eyeBrowUpAction.setEffectiveWeight(4);
-        eyeBrowUpAction.fadeIn(0.5).play();
-      }
-    };
-    const onLeaveFace = () => {
-      if (eyeBrowUpAction && isHovering) {
-        isHovering = false;
-        eyeBrowUpAction.fadeOut(0.6);
-      }
-    };
-    if (!hoverDiv) return;
-    hoverDiv.addEventListener("mouseenter", onHoverFace);
-    hoverDiv.addEventListener("mouseleave", onLeaveFace);
-    return () => {
-      hoverDiv.removeEventListener("mouseenter", onHoverFace);
-      hoverDiv.removeEventListener("mouseleave", onLeaveFace);
-    };
   }
+
+  // Hover stub: your model doesn't have face bones, so this is a no-op.
+  // Scene.tsx still calls this, so we need to return it — but it does nothing.
+  function hover(_gltf: GLTF, _hoverDiv: HTMLDivElement) {
+    return () => { };
+  }
+
   return { mixer, startIntro, hover };
-};
-
-const createBoneAction = (
-  gltf: GLTF,
-  mixer: THREE.AnimationMixer,
-  clip: string,
-  boneNames: string[]
-): THREE.AnimationAction | null => {
-  const AnimationClip = THREE.AnimationClip.findByName(gltf.animations, clip);
-  if (!AnimationClip) {
-    console.error(`Animation "${clip}" not found in GLTF file.`);
-    return null;
-  }
-
-  const filteredClip = filterAnimationTracks(AnimationClip, boneNames);
-
-  return mixer.clipAction(filteredClip);
-};
-
-const filterAnimationTracks = (
-  clip: THREE.AnimationClip,
-  boneNames: string[]
-): THREE.AnimationClip => {
-  const filteredTracks = clip.tracks.filter((track) =>
-    boneNames.some((boneName) => track.name.includes(boneName))
-  );
-
-  return new THREE.AnimationClip(
-    clip.name + "_filtered",
-    clip.duration,
-    filteredTracks
-  );
 };
 
 export default setAnimations;

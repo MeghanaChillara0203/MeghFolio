@@ -1,176 +1,227 @@
-# 3D Portfolio Website
+# Meghana Chillara — AI/ML Portfolio Template
 
-This repository contains the source code for a personal 3D portfolio built with React, TypeScript, Three.js, React Three Fiber, and GSAP. It includes animated page sections, a character scene, custom cursor interactions, and smooth transitions designed for a modern portfolio experience.
+This repository contains the source code for an interactive 3D portfolio built with React, TypeScript, Three.js, and GSAP.
 
-Live site: [https://akashrmalhotra.netlify.app/](https://akashrmalhotra.netlify.app/)
+I adapted this project to build my own portfolio, and this version is structured so **you can easily customize it for your own profile** — especially if you're in AI, data science, or software engineering.
 
-![Portfolio Preview](public/images/preview1.png)
+👉 **Live Demo:** https://meghanachillara.com/
 
-## Table of Contents
+---
 
-- [Features](#features)
-- [Tech Stack](#tech-stack)
-- [Project Structure](#project-structure)
-- [Getting Started](#getting-started)
-- [Available Scripts](#available-scripts)
-- [GSAP License Note](#gsap-license-note)
-- [Customization Guide](#customization-guide)
-- [Troubleshooting](#troubleshooting)
-- [Deployment](#deployment)
-- [License](#license)
+## 🚀 What This Template Is Good For
 
-## Features
+Use this if you want to:
+- Build a **modern, interactive portfolio**
+- Showcase **projects, research, and experience**
+- Stand out with **animations + 3D elements**
+- Avoid building everything from scratch
 
-- Responsive one-page portfolio layout with reusable section components.
-- 3D character scene rendering powered by React Three Fiber and Three.js.
-- GSAP-powered animations and transitions for interactive storytelling.
-- Custom cursor, hover interactions, and scroll-driven visual effects.
-- Organized component architecture with dedicated utilities and style modules.
+---
 
-## Tech Stack
+## 🧭 How to Customize This for Your Portfolio
 
-### Core
+Follow these steps in order — this is the fastest way to make it your own.
 
-- React 18
-- TypeScript
-- Vite
+---
 
-### Animation and 3D
+### 1. Update Your Identity (Start Here)
 
-- GSAP + `@gsap/react`
-- Three.js
-- `@react-three/fiber`
-- `@react-three/drei`
-- `@react-three/postprocessing`
-- `@react-three/cannon`
-- `@react-three/rapier`
+Edit:
 
-### Supporting Libraries
+- `src/components/Navbar.tsx`
+- `src/components/Landing.tsx`
+- `index.html`
 
-- `react-icons`
-- `react-fast-marquee`
-- `@vercel/analytics`
+Replace:
+- Name
+- LinkedIn link
+- Title (Data Scientist / ML Engineer / etc.)
 
-## Project Structure
+---
 
-```text
-.
-├── public/                    # Static assets
-├── src/
-│   ├── assets/                # Local media/assets
-│   ├── components/
-│   │   ├── Character/         # 3D scene + character logic/utilities
-│   │   ├── styles/            # Section/component CSS files
-│   │   ├── About.tsx
-│   │   ├── Career.tsx
-│   │   ├── Contact.tsx
-│   │   ├── Landing.tsx
-│   │   ├── MainContainer.tsx  # Main page composition
-│   │   ├── Navbar.tsx
-│   │   ├── TechStack.tsx
-│   │   ├── WhatIDo.tsx
-│   │   └── Work.tsx
-│   ├── context/               # Global providers (loading state, etc.)
-│   ├── data/                  # Static data/content definitions
-│   ├── App.tsx
-│   └── main.tsx
-├── package.json
-└── vite.config.ts
+### 2. Update Your Story
+
+Edit:
+
+- `src/components/About.tsx`
+
+Write:
+- What you do
+- What you specialize in
+- What kind of problems you solve
+
+💡 Keep it concise and impact-focused.
+
+---
+
+### 3. Add Your Experience
+
+Edit:
+
+- `src/components/Career.tsx`
+
+Focus on:
+- What you accomplished
+- What changed because of your work
+- Real-world impact (not just responsibilities)
+
+---
+
+### 4. Define What You Do
+
+Edit:
+
+- `src/components/WhatIDo.tsx`
+
+Split into two areas:
+- AI / ML / Data (what you build)
+- Engineering / Systems (how you build it)
+
+---
+
+### 5. Add Your Projects (Most Important Section)
+
+Edit:
+
+- `src/components/Work.tsx`
+
+👉 Only include **3–5 strong projects**
+
+Each project should:
+- Have a clear title
+- Describe what it does (not just tech)
+- Link to GitHub or live demo
+
+---
+
+### 6. Update Images
+
+Replace images in:
+
 ```
 
-## Getting Started
+public/images/
+
+```
+
+Make sure your project images match filenames used in `Work.tsx`.
+
+---
+
+### 7. Fix Contact Info
+
+Edit:
+
+- `src/components/Contact.tsx`
+- `src/components/SocialIcons.tsx`
+
+Update:
+- Email
+- GitHub
+- LinkedIn
+- Resume PDF
+
+---
+
+### 8. Replace Tech Stack Icons (Optional)
+
+Edit:
+
+- `src/components/TechStack.tsx`
+
+Replace images in:
+```
+
+public/images/
+
+```
+
+---
+
+### 9. (Optional) Add Videos to Projects
+
+If you want hover previews:
+
+```
+
+public/videos/
+
+````
+
+Then pass:
+```tsx
+video="demo.mp4"
+````
+
+in `Work.tsx`.
+
+---
+```
+
+## 🛠️ Getting Started
 
 ### Prerequisites
 
-- Node.js 18+ (recommended)
-- npm 9+ (or compatible)
+* Node.js 18+
+* npm
 
-### Installation
+### Install & Run
 
-1. Clone the repository:
+```bash
+git clone <your-repo>
+cd portfolio
+npm install
+npm run dev
+```
 
-   ```bash
-   git clone <your-repository-url>
-   cd 3d-portfolio
-   ```
+---
 
-2. Install dependencies:
+## 🧠 Tips for a Strong Portfolio
 
-   ```bash
-   npm install
-   ```
+* ❌ Don’t include every project
 
-3. Start the local development server:
+* ✅ Highlight your **best 3–5**
 
-   ```bash
-   npm run dev
-   ```
+* ❌ Don’t copy resume text
 
-4. Open the URL shown in the terminal (typically `http://localhost:5173`).
+* ✅ Focus on **impact + clarity**
 
-## Available Scripts
+* ❌ Don’t overload with tech
 
-- `npm run dev`  
-  Starts Vite dev server and exposes host for local network testing.
+* ✅ Show **what problems you solved**
 
-- `npm run build`  
-  Type-checks and builds a production-ready bundle.
+---
 
-- `npm run preview`  
-  Serves the production build locally for verification.
+## 📦 Deployment
 
-- `npm run lint`  
-  Runs ESLint checks across the project.
+```bash
+npm run build
+npm run preview
+```
 
-## GSAP License Note
+Deploy `/dist` using:
 
-This project uses the standard `gsap` package, including bonus plugins now available in the core package.
+* Vercel
+* Netlify
+* Cloudflare Pages
 
-- Install dependencies with `npm install`.
-- If migrating from older setups, remove `gsap-trial` from your project.
+---
 
-Read official installation guidance here: [GSAP Installation Docs](https://gsap.com/docs/v3/Installation/)
+## 📁 Project Structure
 
-## Customization Guide
+```text
+src/components/
+  About.tsx        → Your story
+  Career.tsx       → Experience
+  WhatIDo.tsx      → Skills & focus
+  Work.tsx         → Projects (MOST important)
+  Contact.tsx      → Contact info
+  TechStack.tsx    → Visual tech section
+```
 
-You can adapt this portfolio to your own profile by updating the following areas:
+---
 
-- **Content sections**: Edit files in `src/components/` such as `About.tsx`, `Career.tsx`, `WhatIDo.tsx`, and `Work.tsx`.
-- **Data source**: Update static values in files under `src/data/`.
-- **Styling**: Modify component styles in `src/components/styles/` and global styles in `src/index.css` / `src/App.css`.
-- **3D scene behavior**: Adjust scene logic in `src/components/Character/` and related utilities.
-- **Animations**: Tweak GSAP utilities under `src/components/utils/`.
+## 📄 License
 
-## Troubleshooting
+MIT License — feel free to use and modify.
 
-- **Blank screen in development**  
-  Check browser console for module import errors and verify all dependencies are installed.
-
-- **3D performance issues on low-end devices**  
-  Reduce scene complexity and post-processing effects in the character/scene utilities.
-
-- **GSAP plugin errors**  
-  Ensure you have the correct plugin package and license configuration for your target environment.
-
-- **TypeScript build failures**  
-  Run `npm run build` and address reported type errors before deploying.
-
-## Deployment
-
-1. Create a production build:
-
-   ```bash
-   npm run build
-   ```
-
-2. Validate locally:
-
-   ```bash
-   npm run preview
-   ```
-
-3. Deploy the generated `dist/` folder to your hosting provider (for example Vercel, Netlify, or Cloudflare Pages).
-
-## License
-
-This project is open source and available under the [MIT License](LICENSE).

@@ -43,40 +43,27 @@ export const handleHeadRotation = (
   lerp: (x: number, y: number, t: number) => number
 ) => {
   if (!headBone) return;
+
   if (window.scrollY < 200) {
-    const maxRotation = Math.PI / 6;
+    // Mixamo head: Y axis turns left/right, X axis tilts up/down
+    const maxRotY = Math.PI / 8; // ~22° max turn
+    const maxRotX = Math.PI / 12; // ~15° max tilt
+
     headBone.rotation.y = lerp(
       headBone.rotation.y,
-      mouseX * maxRotation,
+      mouseX * maxRotY,
       interpolationY
     );
-    let minRotationX = -0.3;
-    let maxRotationX = 0.4;
-    if (mouseY > minRotationX) {
-      if (mouseY < maxRotationX) {
-        headBone.rotation.x = lerp(
-          headBone.rotation.x,
-          -mouseY - 0.5 * maxRotation,
-          interpolationX
-        );
-      } else {
-        headBone.rotation.x = lerp(
-          headBone.rotation.x,
-          -maxRotation - 0.5 * maxRotation,
-          interpolationX
-        );
-      }
-    } else {
-      headBone.rotation.x = lerp(
-        headBone.rotation.x,
-        -minRotationX - 0.5 * maxRotation,
-        interpolationX
-      );
-    }
+    headBone.rotation.x = lerp(
+      headBone.rotation.x,
+      -mouseY * maxRotX,
+      interpolationX
+    );
   } else {
+    // After scrolling, drift head down toward the monitor
     if (window.innerWidth > 1024) {
-      headBone.rotation.x = lerp(headBone.rotation.x, -0.4, 0.03);
-      headBone.rotation.y = lerp(headBone.rotation.y, -0.3, 0.03);
+      headBone.rotation.x = lerp(headBone.rotation.x, 0.3, 0.03);
+      headBone.rotation.y = lerp(headBone.rotation.y, 0, 0.03);
     }
   }
 };
