@@ -23,10 +23,9 @@ const Career = () => {
               <h3>2025–NOW</h3>
             </div>
             <p>
-              Turned operational data into decision systems that helped teams plan
-              smarter, use resources better, and respond faster. Built analytics
-              and AI-driven experiences that made day-to-day operations more
-              efficient across a growing network of locations.
+              Cut ops planning time 60% with forecasting models across 50+ gym
+              locations. Shipped a RAG-powered GenAI chatbot that killed 40% of
+              support tickets, and kept the whole thing at 90%+ uptime on AWS.
             </p>
           </div>
 
@@ -39,10 +38,10 @@ const Career = () => {
               <h3>2024</h3>
             </div>
             <p>
-              Built accessible healthcare AI experiences that brought real-time
-              predictions into user-facing products. Focused on making machine
-              learning practical, usable, and supportive for patients through
-              thoughtful design and fast, reliable systems.
+              Trained an XGBoost model on Apple Watch data that delivered
+              real-time health alerts at 89% accuracy in under 500ms. Shipped
+              it straight into iOS via Swift and HealthKit, for Alzheimer's
+              patients who actually needed it.
             </p>
           </div>
 
@@ -55,74 +54,10 @@ const Career = () => {
               <h3>2024</h3>
             </div>
             <p>
-              Transformed inspection workflows with AI, improving how defects were
-              detected, analyzed, and documented. Helped reduce manual effort and
-              made complex technical outputs easier for engineering teams to use in
-              real decision-making.
-            </p>
-          </div>
-
-          <div className="career-info-box">
-            <div className="career-info-in">
-              <div className="career-role">
-                <h4>Graduate Teaching Assistant</h4>
-                <h5>Northeastern University</h5>
-              </div>
-              <h3>2023–2024</h3>
-            </div>
-            <p>
-              Helped students build confidence in machine learning, statistics, and
-              data science by breaking down difficult concepts into practical,
-              approachable learning experiences. Supported stronger academic
-              outcomes through hands-on mentoring and structured guidance.
-            </p>
-          </div>
-
-          <div className="career-info-box">
-            <div className="career-info-in">
-              <div className="career-role">
-                <h4>Graduate Research Assistant</h4>
-                <h5>Northeastern University</h5>
-              </div>
-              <h3>2023–2024</h3>
-            </div>
-            <p>
-              Contributed to research in dynamic brain networks and predictive
-              modeling, helping uncover patterns in complex temporal systems.
-              Improved the speed and efficiency of research workflows while
-              supporting deeper analysis of seizure-related behavior.
-            </p>
-          </div>
-
-          <div className="career-info-box">
-            <div className="career-info-in">
-              <div className="career-role">
-                <h4>Career Peer Advisor</h4>
-                <h5>Northeastern University</h5>
-              </div>
-              <h3>2024</h3>
-            </div>
-            <p>
-              Guided students through resumes, interview preparation, and job
-              search strategy, helping them present their strengths more
-              effectively. Created a more supportive and informed path for peers
-              entering data and technology roles.
-            </p>
-          </div>
-
-          <div className="career-info-box">
-            <div className="career-info-in">
-              <div className="career-role">
-                <h4>Student Ambassador</h4>
-                <h5>Northeastern University</h5>
-              </div>
-              <h3>2023–2024</h3>
-            </div>
-            <p>
-              Helped new and prospective students navigate academics, campus life,
-              and career growth with greater confidence. Strengthened community
-              engagement by making the transition into graduate life more informed,
-              welcoming, and connected.
+              Bumped façade defect detection from 74% to 89% with YOLOv8 and
+              Detectron2. Then automated the reporting pipeline with OpenAI,
+              cutting documentation effort by 90% and shipping reports twice
+              as fast.
             </p>
           </div>
 
@@ -135,10 +70,9 @@ const Career = () => {
               <h3>2020–2022</h3>
             </div>
             <p>
-              Built and scaled enterprise systems that improved data reliability,
-              reduced delays, and enabled faster decision-making. Led development
-              efforts and mentored engineers while driving automation across
-              critical business workflows.
+              Migrated 100+ ETL jobs to Airflow and Redshift for 40% faster
+              nightly runs. Built predictive SQL models that cut SLA breaches
+              35%, and mentored 15+ engineers into shipping on time.
             </p>
           </div>
 
@@ -151,10 +85,9 @@ const Career = () => {
               <h3>2019–2020</h3>
             </div>
             <p>
-              Contributed to internal tools and backend systems that supported
-              smoother engineering operations. Built a strong foundation in
-              full-stack development while learning how production software is
-              designed, tested, and delivered.
+              Built internal tools and backend systems while learning how
+              production software actually ships. The messy real version, not
+              the textbook one.
             </p>
           </div>
         </div>

@@ -1,11 +1,4 @@
-import {
-  createContext,
-  PropsWithChildren,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
-import Loading from "../components/Loading";
+import { createContext, PropsWithChildren, useContext } from "react";
 
 interface LoadingType {
   isLoading: boolean;
@@ -16,19 +9,15 @@ interface LoadingType {
 export const LoadingContext = createContext<LoadingType | null>(null);
 
 export const LoadingProvider = ({ children }: PropsWithChildren) => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [loading, setLoading] = useState(0);
-
-  const value = {
-    isLoading,
-    setIsLoading,
-    setLoading,
+  // No-op implementation — loading screen removed
+  const value: LoadingType = {
+    isLoading: false,
+    setIsLoading: () => { },
+    setLoading: () => { },
   };
-  useEffect(() => {}, [loading]);
 
   return (
-    <LoadingContext.Provider value={value as LoadingType}>
-      {isLoading && <Loading percent={loading} />}
+    <LoadingContext.Provider value={value}>
       <main className="main-body">{children}</main>
     </LoadingContext.Provider>
   );

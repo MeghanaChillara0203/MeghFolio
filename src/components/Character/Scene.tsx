@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import setCharacter from "./utils/character";
 import setLighting from "./utils/lighting";
-import { useLoading } from "../../context/LoadingProvider";
 import handleResize from "./utils/resizeUtils";
 import {
   handleMouseMove,
@@ -11,13 +10,11 @@ import {
   handleTouchMove,
 } from "./utils/mouseUtils";
 import setAnimations from "./utils/animationUtils";
-import { setProgress } from "../Loading";
 
 const Scene = () => {
   const canvasDiv = useRef<HTMLDivElement | null>(null);
   const hoverDivRef = useRef<HTMLDivElement>(null);
   const sceneRef = useRef(new THREE.Scene());
-  const { setLoading } = useLoading();
 
   const [, setChar] = useState<THREE.Object3D | null>(null);
 
@@ -56,7 +53,6 @@ const Scene = () => {
       const clock = new THREE.Clock();
 
       const light = setLighting(scene);
-      const progress = setProgress((value) => setLoading(value));
       const { loadCharacter } = setCharacter(renderer, scene, camera);
 
       // will be set once character loads
@@ -86,7 +82,6 @@ const Scene = () => {
             }
           });
           (window as any).__deskMeshes = deskMeshes;
-          console.log("🪑 Desk meshes hidden:", deskMeshes.length);
 
           const toggleDesk = () => {
             const show = window.scrollY > 50;
@@ -96,22 +91,11 @@ const Scene = () => {
 
           headBone = character.getObjectByName("mixamorigHead") || null;
 
-          // DEBUG: expose character for console inspection + log all bone names
-          (window as any).__char = character;
-          (window as any).__scene = scene;
-          const boneNames: string[] = [];
-          character.traverse((o) => {
-            if ((o as any).isBone) boneNames.push(o.name);
-          });
-          console.log("🦴 All bones:", boneNames);
-          console.log("🦴 Head bone found?", headBone);
 
-          progress.loaded().then(() => {
-            setTimeout(() => {
-              light.turnOnLights();
-              animations.startIntro();
-            }, 2500);
-          });
+          setTimeout(() => {
+            light.turnOnLights();
+            animations.startIntro();
+          }, 300);
 
           window.addEventListener("resize", () =>
             handleResize(renderer, camera, canvasDiv, character)
@@ -162,21 +146,6 @@ const Scene = () => {
 
       const animate = () => {
         requestAnimationFrame(animate);
-        // Debug overlay
-        const debugEl = document.getElementById('__debug') || (() => {
-          const d = document.createElement('div');
-          d.id = '__debug';
-          d.style.cssText = 'position:fixed;top:10px;left:10px;z-index:99999;background:rgba(0,0,0,0.8);color:lime;padding:8px;font:11px monospace;pointer-events:none';
-          document.body.appendChild(d);
-          return d;
-        })();
-        let headPos = 'no head';
-        if (headBone) {
-          const wp = new THREE.Vector3();
-          headBone.getWorldPosition(wp);
-          headPos = `head @ (${wp.x.toFixed(2)}, ${wp.y.toFixed(2)}, ${wp.z.toFixed(2)})`;
-        }
-        debugEl.innerText = `scrollY: ${window.scrollY.toFixed(0)}\ncam Z: ${camera.position.z.toFixed(2)} Y: ${camera.position.y.toFixed(2)}\n${headPos}`;
         if (headBone) {
           // Head locked forward — reset rotation every frame
           headBone.rotation.set(0, 0, 0);

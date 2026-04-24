@@ -10,7 +10,7 @@ export let smoother: ScrollSmoother;
 
 const Navbar = () => {
   useEffect(() => {
-    smoother = ScrollSmoother.create({
+    /*smoother = ScrollSmoother.create({
       wrapper: "#smooth-wrapper",
       content: "#smooth-content",
       smooth: 1.7,
@@ -20,8 +20,8 @@ const Navbar = () => {
       ignoreMobileResize: true,
     });
 
-    smoother.scrollTop(0);
-    smoother.paused(true);
+    smoother.scrollTop(0); */
+    // smoother.paused(true);  // disabled — no loading screen to unpause it
 
     let links = document.querySelectorAll(".header ul a");
     links.forEach((elem) => {
@@ -39,6 +39,13 @@ const Navbar = () => {
     window.addEventListener("resize", () => {
       ScrollSmoother.refresh(true);
     });
+
+    // Refresh after all lazy-loaded content mounts
+    const refreshTimer = setTimeout(() => {
+      ScrollSmoother.refresh(true);
+    }, 1000);
+
+    return () => clearTimeout(refreshTimer);
   }, []);
 
   return (
