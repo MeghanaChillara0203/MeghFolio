@@ -6,7 +6,8 @@ const setAnimations = (gltf: GLTF) => {
   const mixer = new THREE.AnimationMixer(character);
 
   if (gltf.animations) {
-    // Intro animation: plays once, clamps at final seated pose
+    // Intro animation: prepared but NOT played yet.
+    // It'll be triggered by startIntro() after loading finishes.
     const introClip = gltf.animations.find(
       (clip) => clip.name === "introAnimation"
     );
@@ -14,30 +15,60 @@ const setAnimations = (gltf: GLTF) => {
       const introAction = mixer.clipAction(introClip);
       introAction.setLoop(THREE.LoopOnce, 1);
       introAction.clampWhenFinished = true;
-      introAction.play();
+      // note: no .play() here — startIntro() handles that
     }
 
-    // Seated idle loops: play on top of each other, blend together
+    // Seated idle loops + typing: prepared but NOT playing at start.
+    // They start when the user scrolls (triggered from Scene.tsx).
     const idleNames = ["key1", "key2"];
-    idleNames.forEach((name) => {
+    idleNames.forEach((name, idx) => {
       const clip = THREE.AnimationClip.findByName(gltf.animations, name);
       if (clip) {
+        // Strip head + neck tracks to prevent tilt
+        clip.tracks = clip.tracks.filter(
+          (t) => !t.name.includes("Head") && !t.name.includes("Neck")
+        );
         const action = mixer.clipAction(clip);
-        action.play();
         action.timeScale = 1.0;
-        action.setEffectiveWeight(0.3); // subtle idle, don't overpower
+        // Play key1 FROZEN at frame 0 so she poses without panting
+        if (idx === 0) {
+          action.setEffectiveWeight(1.0);
+          action.play();
+          action.paused = true;  // freeze animation at current frame
+          action.time = 0;        // hold at frame 0
+        } else {
+          action.setEffectiveWeight(0.3);
+        }
       } else {
         console.warn(`Animation "${name}" not found`);
       }
     });
 
-    // Typing animation: plays as the main body action
     const typingClip = THREE.AnimationClip.findByName(gltf.animations, "typing");
     if (typingClip) {
+      // Strip out head + neck tracks so her head stays locked forward
+      typingClip.tracks = typingClip.tracks.filter(
+        (t) => !t.name.includes("Head") && !t.name.includes("Neck")
+      );
       const typingAction = mixer.clipAction(typingClip);
-      typingAction.play();
       typingAction.timeScale = 1.0;
+      // NOT playing yet — will start on scroll
     }
+  }
+
+  // Called when user starts scrolling — kicks off typing + idles
+  function startSeatedAnimations() {
+    const toPlay = ["typing", "key1", "key2"];
+    toPlay.forEach((name) => {
+      const clip = THREE.AnimationClip.findByName(gltf.animations, name);
+      if (clip) {
+        const action = mixer.clipAction(clip);
+        action.paused = false;  // unfreeze
+        if (!action.isRunning()) {
+          action.reset().play();
+        }
+      }
+    });
   }
 
   function startIntro() {
@@ -45,9 +76,14 @@ const setAnimations = (gltf: GLTF) => {
       (clip) => clip.name === "introAnimation"
     );
     if (introClip) {
+      // Strip head + neck tracks so her head stays locked forward
+      introClip.tracks = introClip.tracks.filter(
+        (t) => !t.name.includes("Head") && !t.name.includes("Neck")
+      );
       const introAction = mixer.clipAction(introClip);
+      introAction.setLoop(THREE.LoopOnce, 1);
       introAction.clampWhenFinished = true;
-      introAction.reset().play();
+      // note: no .play() here — startIntro() handles that
     }
   }
 
@@ -57,7 +93,7 @@ const setAnimations = (gltf: GLTF) => {
     return () => { };
   }
 
-  return { mixer, startIntro, hover };
+  return { mixer, startIntro, hover, startSeatedAnimations };
 };
 
 export default setAnimations;

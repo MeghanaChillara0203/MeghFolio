@@ -22,9 +22,16 @@ const setCharacter = (
 
           character.traverse((child: any) => {
             if (child.isMesh) {
-              child.castShadow = true;
-              child.receiveShadow = true;
+              // Disable shadows since we have no ground plane.
+              // Leaving them on creates ghosting artifacts on the character's own geometry.
+              child.castShadow = false;
+              child.receiveShadow = false;
               child.frustumCulled = true;
+              // Prevent z-fighting/ghosting on transparent materials
+              if (child.material) {
+                child.material.transparent = false;
+                child.material.depthWrite = true;
+              }
             }
           });
 

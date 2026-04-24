@@ -22,6 +22,8 @@ const Scene = () => {
   const [, setChar] = useState<THREE.Object3D | null>(null);
 
   useEffect(() => {
+    // Ensure page starts at top
+    window.scrollTo(0, 0);
     if (canvasDiv.current) {
       const rect = canvasDiv.current.getBoundingClientRect();
       const container = { width: rect.width, height: rect.height };
@@ -31,17 +33,21 @@ const Scene = () => {
       const renderer = new THREE.WebGLRenderer({
         alpha: true,
         antialias: true,
+        powerPreference: "high-performance",
       });
       renderer.setSize(container.width, container.height);
-      renderer.setPixelRatio(window.devicePixelRatio);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
       renderer.toneMappingExposure = 1;
+      renderer.setClearColor(0x000000, 0);  // transparent background
+      renderer.shadowMap.enabled = false;
       canvasDiv.current.appendChild(renderer.domElement);
 
-      // Camera — tuned for the Mixamo-scale character
-      const camera = new THREE.PerspectiveCamera(30, aspect, 0.1, 1000);
-      camera.position.set(0, 1.5, 3.5);
-      camera.lookAt(0, 1.0, 0);
+      const camera = new THREE.PerspectiveCamera(20, aspect, 0.1, 1000);
+      camera.position.set(0, 0.65, 2.5);   // close portrait (narrow FOV = no desk)
+      const lookTarget = new THREE.Vector3(0, 0.6, 0);
+      (window as any).__lookTarget = lookTarget;
+      camera.lookAt(lookTarget);
       camera.updateProjectionMatrix();
 
       let headBone: THREE.Object3D | null = null;
@@ -53,19 +59,14 @@ const Scene = () => {
       const progress = setProgress((value) => setLoading(value));
       const { loadCharacter } = setCharacter(renderer, scene, camera);
 
+      // will be set once character loads
+      let startSeatedAnims: (() => void) | null = null;
+      let seatedStarted = false;
+
       loadCharacter().then((gltf) => {
         if (gltf) {
           const animations = setAnimations(gltf);
-          // DEBUG: log character scale and position
-          const box = new THREE.Box3().setFromObject(gltf.scene);
-          const size = new THREE.Vector3();
-          const center = new THREE.Vector3();
-          box.getSize(size);
-          box.getCenter(center);
-          console.log("🎭 Character size:", size);
-          console.log("🎭 Character center:", center);
-          console.log("🎭 Character scale:", gltf.scene.scale);
-
+          startSeatedAnims = animations.startSeatedAnimations;
 
           if (hoverDivRef.current) {
             animations.hover(gltf, hoverDivRef.current);
@@ -75,8 +76,35 @@ const Scene = () => {
           setChar(character);
           scene.add(character);
 
-          // Head bone for mouse-follow — Mixamo uses mixamorig:Head
-          headBone = character.getObjectByName("mixamorig:Head") || null;
+          // Identify and hide desk/environment meshes on landing
+          const deskMeshes: THREE.Object3D[] = [];
+          character.traverse((o: any) => {
+            // Character mesh is SkinnedMesh (Mesh_0). Everything else is desk/env
+            if (o.isMesh && !o.isSkinnedMesh && o.name !== "Mesh_0") {
+              deskMeshes.push(o);
+              o.visible = false;
+            }
+          });
+          (window as any).__deskMeshes = deskMeshes;
+          console.log("🪑 Desk meshes hidden:", deskMeshes.length);
+
+          const toggleDesk = () => {
+            const show = window.scrollY > 50;
+            deskMeshes.forEach((m: any) => (m.visible = show));
+          };
+          window.addEventListener("scroll", toggleDesk);
+
+          headBone = character.getObjectByName("mixamorigHead") || null;
+
+          // DEBUG: expose character for console inspection + log all bone names
+          (window as any).__char = character;
+          (window as any).__scene = scene;
+          const boneNames: string[] = [];
+          character.traverse((o) => {
+            if ((o as any).isBone) boneNames.push(o.name);
+          });
+          console.log("🦴 All bones:", boneNames);
+          console.log("🦴 Head bone found?", headBone);
 
           progress.loaded().then(() => {
             setTimeout(() => {
@@ -84,11 +112,22 @@ const Scene = () => {
               animations.startIntro();
             }, 2500);
           });
+
           window.addEventListener("resize", () =>
             handleResize(renderer, camera, canvasDiv, character)
           );
         }
       });
+
+      // Kick off typing/idles when user first scrolls
+      const onFirstScroll = () => {
+        if (!seatedStarted && window.scrollY > 50 && startSeatedAnims) {
+          seatedStarted = true;
+          startSeatedAnims();
+          window.removeEventListener("scroll", onFirstScroll);
+        }
+      };
+      window.addEventListener("scroll", onFirstScroll);
 
       let mouse = { x: 0, y: 0 };
       let interpolation = { x: 0.1, y: 0.2 };
@@ -123,20 +162,30 @@ const Scene = () => {
 
       const animate = () => {
         requestAnimationFrame(animate);
+        // Debug overlay
+        const debugEl = document.getElementById('__debug') || (() => {
+          const d = document.createElement('div');
+          d.id = '__debug';
+          d.style.cssText = 'position:fixed;top:10px;left:10px;z-index:99999;background:rgba(0,0,0,0.8);color:lime;padding:8px;font:11px monospace;pointer-events:none';
+          document.body.appendChild(d);
+          return d;
+        })();
+        let headPos = 'no head';
         if (headBone) {
-          handleHeadRotation(
-            headBone,
-            mouse.x,
-            mouse.y,
-            interpolation.x,
-            interpolation.y,
-            THREE.MathUtils.lerp
-          );
+          const wp = new THREE.Vector3();
+          headBone.getWorldPosition(wp);
+          headPos = `head @ (${wp.x.toFixed(2)}, ${wp.y.toFixed(2)}, ${wp.z.toFixed(2)})`;
+        }
+        debugEl.innerText = `scrollY: ${window.scrollY.toFixed(0)}\ncam Z: ${camera.position.z.toFixed(2)} Y: ${camera.position.y.toFixed(2)}\n${headPos}`;
+        if (headBone) {
+          // Head locked forward — reset rotation every frame
+          headBone.rotation.set(0, 0, 0);
         }
         const delta = clock.getDelta();
         if (mixer) {
           mixer.update(delta);
         }
+        camera.lookAt(lookTarget);  // always look at character (dynamic)
         renderer.render(scene, camera);
       };
       animate();
@@ -148,6 +197,7 @@ const Scene = () => {
         window.removeEventListener("resize", () =>
           handleResize(renderer, camera, canvasDiv, null!)
         );
+        window.removeEventListener("scroll", onFirstScroll);
         if (canvasDiv.current) {
           canvasDiv.current.removeChild(renderer.domElement);
         }
@@ -158,6 +208,8 @@ const Scene = () => {
         }
       };
     }
+
+
   }, []);
 
   return (

@@ -33,23 +33,46 @@ export function setCharTimeline(
     },
   });
 
-  // Neck bone for the "looking at monitor" lean — Mixamo uses mixamorig:Neck
-  const neckBone = character?.getObjectByName("mixamorig:Neck");
+  // Neck bone for the "looking at monitor" lean — Mixamo uses mixamorigNeck
+  const neckBone = character?.getObjectByName("mixamorigNeck");
 
   if (window.innerWidth > 1024) {
     if (character) {
+      const deskMeshes = (window as any).__deskMeshes;
+      const lookTarget = (window as any).__lookTarget;
+
       tl1
-        .fromTo(character.rotation, { y: 0 }, { y: 0.4, duration: 1 }, 0)
-        .to(camera.position, { z: 3.0 }, 0)
-        .fromTo(".character-model", { x: 0 }, { x: "-25%", duration: 1 }, 0)
-        .to(".landing-container", { opacity: 0, duration: 0.4 }, 0)
-        .to(".landing-container", { y: "40%", duration: 0.8 }, 0)
-        .fromTo(".about-me", { y: "-50%" }, { y: "0%" }, 0);
+        // About Me framing: 3/4 left view, character small in bottom-left
+        .to(camera.position, { x: -1.5, y: 0.3, z: 3.0, duration: 1 }, 0)
+        .to(camera as any, {
+          fov: 22,
+          duration: 1,
+          onUpdate: () => camera.updateProjectionMatrix(),
+        }, 0)
+        // lookTarget shifted up + right → character appears down + left in frame
+        .to(lookTarget, { x: 1.0, y: 0.8, z: 0, duration: 1 }, 0)
+        .to(".landing-container", { opacity: 0, duration: 1 }, 0)
+        .to(".landing-container", { y: "40%", duration: 1 }, 0)
+        .fromTo(".about-me", { y: "-50%" }, { y: "0%", duration: 1 }, 0);
 
       tl2
+        // What I Do: full body, 3/4 left, bottom center
+        .to(camera as any, {
+          fov: 30,
+          duration: 6,
+          delay: 2,
+          ease: "power3.inOut",
+          onUpdate: () => camera.updateProjectionMatrix(),
+        }, 0)
         .to(
           camera.position,
-          { z: 6, y: 2.0, duration: 6, delay: 2, ease: "power3.inOut" },
+          { x: -3.5, y: 1.2, z: 5.0, duration: 6, delay: 2, ease: "power3.inOut" },
+          0
+        )
+        // lookTarget high → character sits at BOTTOM of frame, centered horizontally (x=0)
+        .to(
+          lookTarget,
+          { x: 0, y: 1.3, duration: 6, delay: 2, ease: "power3.inOut" },
           0
         )
         .to(".about-section", { y: "30%", duration: 6 }, 0)
@@ -60,7 +83,7 @@ export function setCharTimeline(
           { pointerEvents: "none", x: "-12%", delay: 2, duration: 5 },
           0
         )
-        .to(character.rotation, { y: 0.6, x: 0.08, delay: 3, duration: 3 }, 0)
+        //.to(character.rotation, { y: 0.6, x: 0.08, delay: 3, duration: 3 }, 0)
         .fromTo(
           ".what-box-in",
           { display: "none" },
@@ -74,9 +97,9 @@ export function setCharTimeline(
           0.3
         );
 
-      if (neckBone) {
-        tl2.to(neckBone.rotation, { x: 0.3, delay: 2, duration: 3 }, 0);
-      }
+      //if (neckBone) {
+      //  tl2.to(neckBone.rotation, { x: 0.3, delay: 2, duration: 3 }, 0);
+      //}
 
       tl3
         .fromTo(
